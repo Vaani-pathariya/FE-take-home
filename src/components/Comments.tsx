@@ -3,6 +3,7 @@ import axios from "axios";
 import left from "../assets/left_arrow.png";
 import right from "../assets/right_arrow.png";
 import toast from "react-hot-toast";
+import * as XLSX from "xlsx"
 function Comments() {
   interface Comment {
     body: String;
@@ -51,6 +52,12 @@ function Comments() {
       setCurrentPage(1);
     }
   };
+  const downloadData=()=>{
+    const sheet = XLSX.utils.json_to_sheet(data);
+    const book = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(book,sheet,"comments");
+    XLSX.writeFile(book,"data.xlsx");
+  }
   useEffect(() => {
     handleComments();
   }, []);
@@ -82,6 +89,9 @@ function Comments() {
             <div className="border border-1 p-1">{item.body}</div>
           </React.Fragment>
         ))}
+      </div>
+      <div className="text-center">
+      <button className="bg-purple-200 p-2 rounded-md mt-2" onClick={downloadData}>Download</button>
       </div>
       <div className="flex overflow-hidden">
         <img src={left} onClick={DownPage}></img>
